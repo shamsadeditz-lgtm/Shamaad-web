@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pro Text Repeater - SHAMSAD ALAM</title>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  :root {
+    --bg: rgba(15, 23, 42, 0.85);
+    --card: rgba(30, 41, 59, 0.9);
+    --text: #f1f5f9;
+    --accent: #3b82f6;
+    --accent2: #8b5cf6;
+    --border: rgba(51, 65, 85, 0.5);
+  }
+  
+  body.light {
+    --bg: rgba(248, 250, 252, 0.85);
+    --card: rgba(255, 255, 255, 0.9);
+    --text: #1e293b;
+    --border: rgba(226, 232, 240, 0.5);
+  }
+  
+  body {
+    background: url('shamsad-bg.jpg') no-repeat center fixed;
+    background-size: cover;
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    transition: 0.3s;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    backdrop-filter: blur(8px);
+    z-index: -1;
+  }
+  
+  #welcomeScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(10px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: 0.5s;
+  }
+  
+  #welcomeScreen.hide {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .welcome-content {
+    text-align: center;
+    animation: scaleIn 1s ease-out;
+  }
+  
+  .welcome-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradientShift 3s ease infinite;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+  }
+  
+  .welcome-hindi {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease-out 0.5s both;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  
+  .welcome-subtitle {
+    font-size: 1.2rem;
+    color: rgba(241, 245, 249, 0.7);
+    margin-bottom: 50px;
+    animation: fadeInUp 1s ease-out 1s both;
+  }
+  
+  #nextBtn {
+    padding: 18px 50px;
+    font-size: 22px;
+    font-weight: 800;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: fadeInUp 1s ease-out 1.5s both;
+  }
+  
+  #nextBtn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+  }
+  
+  #nextBtn:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+  
+  .particles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(59, 130, 246, 0.6);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  
+  @keyframes scaleIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    0% { transform: translateY(30px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-100px) translateX(50px); }
+  }
+  
+  .main-content {
+    display: none;
+  }
+  
+  .main-content.show {
+    display: block;
+    animation: showContent 0.5s ease-in-out;
+  }
+  
+  @keyframes showContent {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px 20px;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .header h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+  }
+  
+  .header p {
+    opacity: 0.7;
+    font-size: 14px;
+  }
+  
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+  }
+  
+  .controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  @media (max-width: 600px) {
+    .controls {
+      grid-template-columns: 1fr;
+    }
+    .welcome-title {
+      font-size: 2rem;
+    }
+    .welcome-hindi {
+      font-size: 1.3rem;
+    }
+    .header h1 {
+      font-size: 1.8rem;
+    }
+    #nextBtn {
+      font-size: 18px;
+      padding: 15px 40px;
+    }
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.9;
+  }
+  
+  textarea, input, select {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.5);
+    border: 2px solid var(--border);
+    color: var(--text);
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    transition: 0.2s;
+    outline: none;
+    backdrop-filter: blur(5px);
+  }
+  
+  textarea:focus, input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+  
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+  
+  .btn-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  
+  button {
+    flex: 1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
+  button.secondary {
+    background: rgba(51, 65, 85, 0.6);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  
+  .output-area {
+    position: relative;
+  }
+  
+  .output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .counter {
+    font-size: 13px;
+    opacity: 0.7;
+  }
+  
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .theme-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .watermark {
+    text-align: center;
+    margin-top: 30px;
+    opacity: 0.6;
+    font-size: 12px;
+    text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+  }
+</style>
+</head>
+<body>
+  
+<div id="welcomeScreen">
+  <div class="particles" id="particles"></div>
+  <div class="welcome-content">
+    <div class="welcome-title">WELCOME TO SHAMSAD EditZ's WEBSITE</div>
+    <div class="welcome-hindi">SHAMSAD EditZ की वेबसाइट पर आपका स्वागत है</div>
+    <div class="welcome-subtitle"> </div>
+    <div class="welcome-subtitle">Devloped by SHAMSAD ALAM</div>
+    <button id="nextBtn">NEXT →</button>
+  </div>
+</div>
+
+<div class="main-content" id="mainContent">
+<div class="container">
+  <div class="top-bar">
+    <div style="font-weight: 700; font-size: 18px;">SHAMSAD ALAM</div>
+    <button class="theme-btn" onclick="toggleTheme()">🎨 Theme</button>
+  </div>
+  
+  <div class="header">
+    <h1>Pro Text Repeater</h1>
+    <p>अपना text बार-बार repeat करो, professional tool</p>
+  </div>
+  
+  <div class="card">
+    <label>Text लिखो जो repeat करना है</label>
+    <textarea id="inputText" placeholder="यहाँ अपना text लिखो...">SHAMSAD EDITZ</textarea>
+    
+    <div class="controls">
+      <div>
+        <label>कितनी बार Repeat करें?</label>
+        <input type="number" id="repeatCount" value="100" min="1" max="100000">
+      </div>
+      <div>
+        <label>Separator चुनो</label>
+        <select id="separator">
+          <option value="newline">New Line ⏎</option>
+          <option value="space">Space </option>
+          <option value="comma">Comma ,</option>
+          <option value="dash">Dash -</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+    </div>
+    
+    <div id="customSepDiv" style="display:none; margin-bottom:15px;">
+      <label>Custom Separator लिखो</label>
+      <input type="text" id="customSep" placeholder="जैसे: *** या |">
+    </div>
+    
+    <div class="btn-group">
+      <button onclick="generateText()">⚡ Generate</button>
+      <button class="secondary" onclick="copyText()">📋 Copy</button>
+      <button class="secondary" onclick="downloadTXT()">📥 Download</button>
+      <button class="secondary" onclick="clearAll()">🗑️ Clear</button>
+    </div>
+  </div>
+  
+  <div class="card output-area">
+    <div class="output-header">
+      <label>Output</label>
+      <span class="counter" id="counter">0 characters</span>
+    </div>
+    <textarea id="outputText" readonly placeholder="Generate दबाते ही यहाँ result आएगा..."></textarea>
+  </div>
+  
+  <div class="watermark"> devloped by SHAMSAD ALAM</div>
+  </div>
+</div>
+</div>
+
+<script>
+function createParticles() {
+  const container = document.getElementById('particles');
+  for(let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 6 + 's';
+    p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  document.getElementById('welcomeScreen').classList.add('hide');
+  document.getElementById('mainContent').classList.add('show');
+});
+
+const inputText = document.getElementById('inputText');
+const repeatCount = document.getElementById('repeatCount');
+const separator = document.getElementById('separator');
+const customSep = document.getElementById('customSep');
+const customSepDiv = document.getElementById('customSepDiv');
+const outputText = document.getElementById('outputText');
+const counter = document.getElementById('counter');
+
+separator.addEventListener('change', () => {
+  customSepDiv.style.display = separator.value === 'custom' ? 'block' : 'none';
+});
+
+function getSeparator() {
+  switch(separator.value) {
+    case 'newline': return '\n';
+    case 'space': return ' ';
+    case 'comma': return ', ';
+    case 'dash': return ' - ';
+    case 'custom': return customSep.value || ' ';
+    default: return '\n';
+  }
+}
+
+function generateText() {
+  const text = inputText.value.trim();
+  const count = parseInt(repeatCount.value);
+  const sep = getSeparator();
+  
+  if(!text) {
+    alert('पहले text लिखो!');
+    return;
+  }
+  if(count < 1 || count > 1000000) {
+    alert('Count 1 से 1000000 के बीच रखो!');
+    return;
+  }
+  
+  const result = Array(count).fill(text).join(sep);
+  outputText.value = result;
+  updateCounter();
+}
+
+function copyText() {
+  if(!outputText.value) {
+    alert('पहले Generate करो!');
+    return;
+  }
+  outputText.select();
+  document.execCommand('copy');
+  alert('✅ Copied');
+}
+
+function downloadTXT() {
+  if(!outputText.value) {
+    alert('पहले Generate करो!');
+    return;
+  }
+  const blob = new Blob([outputText.value], {type: 'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'repeated_text_SHAMSAD.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function clearAll() {
+  inputText.value = '';
+  outputText.value = '';
+  repeatCount.value = '10';
+  updateCounter();
+}
+
+function updateCounter() {
+  counter.textContent = outputText.value.length + ' characters | ' + repeatCount.value + ' lines';
+}
+
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+
+outputText.addEventListener('input', updateCounter);
+repeatCount.addEventListener('input', updateCounter);
+
+if(localStorage.getItem('theme') === 'light') {
+  document.body.classList.add('light');
+}
+
+inputText.addEventListener('keydown', (e) => {
+  if(e.ctrlKey && e.key === 'Enter') generateText();
+});
+</script>
+</body>
+</html>
